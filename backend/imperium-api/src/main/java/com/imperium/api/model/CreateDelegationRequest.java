@@ -10,7 +10,7 @@ import java.util.List;
  */
 public record CreateDelegationRequest(
     @Valid
-    @NotEmpty(message = "至少需要一个派发项")
+    @NotEmpty(message = "At least one delegation is required")
     List<DelegationItemRequest> items
 ) {
 }

@@ -133,11 +133,11 @@ function DocketDetailPage() {
   }
 
   if (loading) {
-    return <div className="page-shell"><section className="card">加载中...</section></div>
+    return <div className="page-shell"><section className="card">Loading...</section></div>
   }
 
   if (!docket) {
-    return <div className="page-shell"><section className="card">未找到议案</section></div>
+    return <div className="page-shell"><section className="card">Docket not found</section></div>
   }
 
   return (
@@ -149,8 +149,8 @@ function DocketDetailPage() {
             <h1>{docket.title}</h1>
           </div>
           <div className="header-actions">
-            <Link className="secondary-button" to="/dockets">返回列表</Link>
-            <button className="secondary-button" onClick={() => void load()}>刷新</button>
+            <Link className="secondary-button" to="/dockets">Back to dockets</Link>
+            <button className="secondary-button" onClick={() => void load()}>Refresh</button>
           </div>
         </div>
         <div className="pill-row">
@@ -166,7 +166,7 @@ function DocketDetailPage() {
         <article className="card">
           <h2>Senate</h2>
           <div className="button-row">
-            <button className="secondary-button" onClick={() => void openSenate()}>开启会话</button>
+            <button className="secondary-button" onClick={() => void openSenate()}>Open session</button>
           </div>
           {senate ? (
             <>
@@ -174,31 +174,31 @@ function DocketDetailPage() {
               <p className="meta-line">Status: {senate.status}</p>
               <p className="meta-line">Motion: {senate.recommendedMotion || 'N/A'}</p>
               <div className="mini-list">
-                <strong>共识</strong>
+                <strong>Consensus</strong>
                 {senate.consensus.map((item) => <span key={item}>{item}</span>)}
               </div>
               <div className="mini-list">
-                <strong>争议</strong>
+                <strong>Disputes</strong>
                 {senate.disputes.map((item) => <span key={item}>{item}</span>)}
               </div>
               <div className="mini-list">
-                <strong>意见</strong>
+                <strong>Opinions</strong>
                 {senate.opinions.map((item) => <span key={item.id}>{item.roleCode}: {item.summary}</span>)}
               </div>
             </>
           ) : (
-            <p className="meta-line">暂无元老院会话</p>
+            <p className="meta-line">No Senate session yet</p>
           )}
 
           <form className="stack-form" onSubmit={submitSenateOpinion}>
             <label>
-              <span>角色</span>
+              <span>Role</span>
               <select value={senateForm.roleCode} onChange={(event) => setSenateForm((prev) => ({ ...prev, roleCode: event.target.value }))}>
                 {senatorRoles.map((role) => <option key={role} value={role}>{role}</option>)}
               </select>
             </label>
             <label>
-              <span>立场</span>
+              <span>Stance</span>
               <select value={senateForm.stance} onChange={(event) => setSenateForm((prev) => ({ ...prev, stance: event.target.value }))}>
                 <option value="SUPPORT">SUPPORT</option>
                 <option value="OBJECT">OBJECT</option>
@@ -206,31 +206,31 @@ function DocketDetailPage() {
                 <option value="NEUTRAL">NEUTRAL</option>
               </select>
             </label>
-            <input value={senateForm.summary} onChange={(event) => setSenateForm((prev) => ({ ...prev, summary: event.target.value }))} placeholder="摘要" required />
-            <textarea className="text-area" rows={3} value={senateForm.details} onChange={(event) => setSenateForm((prev) => ({ ...prev, details: event.target.value }))} placeholder="详细意见" />
-            <button className="primary-button" type="submit">提交元老意见</button>
+            <input value={senateForm.summary} onChange={(event) => setSenateForm((prev) => ({ ...prev, summary: event.target.value }))} placeholder="Opinion summary" required />
+            <textarea className="text-area" rows={3} value={senateForm.details} onChange={(event) => setSenateForm((prev) => ({ ...prev, details: event.target.value }))} placeholder="Detailed opinion" />
+            <button className="primary-button" type="submit">Submit opinion</button>
           </form>
         </article>
 
         <article className="card">
           <h2>Tribune</h2>
-          <textarea className="text-area" rows={4} value={tribuneReason} onChange={(event) => setTribuneReason(event.target.value)} placeholder="保民官意见 / 否决原因" />
+          <textarea className="text-area" rows={4} value={tribuneReason} onChange={(event) => setTribuneReason(event.target.value)} placeholder="Tribune comment or veto rationale" />
           <div className="button-row">
-            <button className="primary-button" onClick={() => void handleTribune('approve')}>通过</button>
-            <button className="danger-button" onClick={() => void handleTribune('reject')}>否决</button>
-            <button className="secondary-button" onClick={() => void handleTribune('return')}>退回重议</button>
+            <button className="primary-button" onClick={() => void handleTribune('approve')}>Approve</button>
+            <button className="danger-button" onClick={() => void handleTribune('reject')}>Veto</button>
+            <button className="secondary-button" onClick={() => void handleTribune('return')}>Return for debate</button>
           </div>
         </article>
 
         <article className="card">
           <h2>Caesar</h2>
-          <textarea className="text-area" rows={4} value={caesarComment} onChange={(event) => setCaesarComment(event.target.value)} placeholder="裁决批注" />
-          <input value={caesarConstraints} onChange={(event) => setCaesarConstraints(event.target.value)} placeholder="限制条件，逗号分隔" />
+          <textarea className="text-area" rows={4} value={caesarComment} onChange={(event) => setCaesarComment(event.target.value)} placeholder="Decision notes" />
+          <input value={caesarConstraints} onChange={(event) => setCaesarConstraints(event.target.value)} placeholder="Constraints, comma-separated" />
           <div className="button-row">
-            <button className="primary-button" onClick={() => void handleCaesar('approve')}>批准</button>
-            <button className="secondary-button" onClick={() => void handleCaesar('reject')}>退回元老院</button>
-            <button className="danger-button" onClick={() => void handleCaesar('override')}>强制批准</button>
-            <button className="secondary-button" onClick={() => void handleCaesar('restrict')}>附限制批准</button>
+            <button className="primary-button" onClick={() => void handleCaesar('approve')}>Approve</button>
+            <button className="secondary-button" onClick={() => void handleCaesar('reject')}>Return to Senate</button>
+            <button className="danger-button" onClick={() => void handleCaesar('override')}>Override and approve</button>
+            <button className="secondary-button" onClick={() => void handleCaesar('restrict')}>Approve with constraints</button>
           </div>
         </article>
 
@@ -238,14 +238,14 @@ function DocketDetailPage() {
           <h2>Delegations</h2>
           <form className="stack-form" onSubmit={submitDelegation}>
             <label>
-              <span>角色</span>
+              <span>Role</span>
               <select value={delegationForm.roleCode} onChange={(event) => setDelegationForm((prev) => ({ ...prev, roleCode: event.target.value }))}>
                 {delegationRoles.map((role) => <option key={role} value={role}>{role}</option>)}
               </select>
             </label>
-            <input value={delegationForm.objective} onChange={(event) => setDelegationForm((prev) => ({ ...prev, objective: event.target.value }))} placeholder="执行目标" required />
-            <input value={delegationForm.dependsOn} onChange={(event) => setDelegationForm((prev) => ({ ...prev, dependsOn: event.target.value }))} placeholder="依赖 delegation id，逗号分隔" />
-            <button className="primary-button" type="submit">新增派发</button>
+            <input value={delegationForm.objective} onChange={(event) => setDelegationForm((prev) => ({ ...prev, objective: event.target.value }))} placeholder="Execution objective" required />
+            <input value={delegationForm.dependsOn} onChange={(event) => setDelegationForm((prev) => ({ ...prev, dependsOn: event.target.value }))} placeholder="Dependency delegation IDs, comma-separated" />
+            <button className="primary-button" type="submit">Add delegation</button>
           </form>
 
           <div className="mini-list">
@@ -269,8 +269,8 @@ function DocketDetailPage() {
                 <p className="meta-line">{task.blockReason || task.outputSummary || 'No notes'}</p>
                 <div className="button-row compact">
                   <button className="secondary-button" onClick={() => void updateTaskProgress(task.id, Math.min(task.progressPercent + 25, 99))}>+25%</button>
-                  <button className="danger-button" onClick={() => void blockTask(task.id)}>阻塞</button>
-                  <button className="primary-button" onClick={() => void completeTask(task.id)}>完成</button>
+                  <button className="danger-button" onClick={() => void blockTask(task.id)}>Block</button>
+                  <button className="primary-button" onClick={() => void completeTask(task.id)}>Complete</button>
                 </div>
               </div>
             ))}

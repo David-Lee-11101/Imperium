@@ -8,13 +8,13 @@ import jakarta.validation.constraints.NotNull;
  * 元老意见提交请求
  */
 public record SenateOpinionRequest(
-    @NotNull(message = "元老角色不能为空")
+    @NotNull(message = "Senator role is required")
     RoleCode roleCode,
 
-    @NotBlank(message = "立场不能为空")
+    @NotBlank(message = "Stance is required")
     String stance,
 
-    @NotBlank(message = "摘要不能为空")
+    @NotBlank(message = "Summary is required")
     String summary,
 
     String details

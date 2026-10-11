@@ -34,6 +34,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResponse<Void> handleGenericException(Exception ex) {
-        return ApiResponse.error("INTERNAL_ERROR", "系统内部错误：" + ex.getMessage());
+        return ApiResponse.error("INTERNAL_ERROR", "Internal server error: " + ex.getMessage());
     }
 }

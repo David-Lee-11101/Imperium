@@ -50,10 +50,10 @@ function AuditPage() {
         <div className="card-header">
           <div>
             <p className="eyebrow">Audit</p>
-            <h1>审计队列</h1>
+            <h1>Audit queue</h1>
           </div>
           <button className="secondary-button" onClick={() => void load()}>
-            刷新
+            Refresh
           </button>
         </div>
         {error ? <p className="error-text">{error}</p> : null}
@@ -76,14 +76,14 @@ function AuditPage() {
             <div className="card" key={`${item.docketId}-actions`}>
               <h3>{item.title}</h3>
               <div className="button-row">
-                <button className="primary-button" disabled={submittingId === item.docketId} onClick={() => void handleAction(item.docketId, 'pass')}>通过并归档</button>
-                <button className="secondary-button" disabled={submittingId === item.docketId} onClick={() => void handleAction(item.docketId, 'return')}>退回执行</button>
-                <button className="danger-button" disabled={submittingId === item.docketId} onClick={() => void handleAction(item.docketId, 'escalate')}>升级恺撒</button>
+                <button className="primary-button" disabled={submittingId === item.docketId} onClick={() => void handleAction(item.docketId, 'pass')}>Pass and archive</button>
+                <button className="secondary-button" disabled={submittingId === item.docketId} onClick={() => void handleAction(item.docketId, 'return')}>Return to execution</button>
+                <button className="danger-button" disabled={submittingId === item.docketId} onClick={() => void handleAction(item.docketId, 'escalate')}>Escalate to Caesar</button>
               </div>
             </div>
           ))}
         </div>
-        {loading && <p className="meta-line">加载中...</p>}
+        {loading && <p className="meta-line">Loading...</p>}
       </section>
     </div>
   )

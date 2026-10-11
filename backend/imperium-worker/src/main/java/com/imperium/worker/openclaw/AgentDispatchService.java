@@ -49,7 +49,7 @@ public class AgentDispatchService {
     @Value("${imperium.base-url:http://localhost:8080}")
     private String baseUrl;
 
-    @Value("${imperium.agent.callback-secret:dev-secret-change-in-prod}")
+    @Value("${imperium.agent.callback-secret}")
     private String callbackSecret;
 
     @Value("${imperium.agent.default-timeout-sec:120}")

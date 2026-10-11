@@ -49,11 +49,11 @@ public class WorkflowAutomationService {
         docket.setSummary(buildSummary(docket.getEdictRaw()));
         docketMapper.updateById(docket);
 
-        docketService.transition(docketId, new TransitionRequest(DocketState.TRIAGED, RoleCode.PRAECO, "自动完成传令官分流与规范化处理"));
+        docketService.transition(docketId, new TransitionRequest(DocketState.TRIAGED, RoleCode.PRAECO, "Automated Praeco triage and normalization completed"));
         if (docket.getMode() == OperatingMode.DIRECT_DECREE) {
-            docketService.transition(docketId, new TransitionRequest(DocketState.AWAITING_CAESAR, RoleCode.PRAECO, "直接法令模式，自动跳过元老院"));
+            docketService.transition(docketId, new TransitionRequest(DocketState.AWAITING_CAESAR, RoleCode.PRAECO, "Direct-decree mode bypassed the Senate"));
         } else {
-            docketService.transition(docketId, new TransitionRequest(DocketState.IN_SENATE, RoleCode.PRAECO, "自动送入元老院议程"));
+            docketService.transition(docketId, new TransitionRequest(DocketState.IN_SENATE, RoleCode.PRAECO, "Docket added to the Senate agenda"));
             senateService.openSession(docketId);
         }
     }
@@ -76,7 +76,7 @@ public class WorkflowAutomationService {
             return;
         }
 
-        docketService.transition(docketId, new TransitionRequest(DocketState.VETO_REVIEW, RoleCode.TRIBUNE, "元老院会话已闭合，自动进入保民官审查"));
+        docketService.transition(docketId, new TransitionRequest(DocketState.VETO_REVIEW, RoleCode.TRIBUNE, "Senate session closed; Tribune review started"));
     }
 
     @Transactional
@@ -97,7 +97,7 @@ public class WorkflowAutomationService {
         }
 
         docketService.caesarApprove(docketId, new CaesarDecisionRequest(
-            "自动策略：保民官审查通过后默认批准进入执行阶段",
+            "Automation policy approved execution after Tribune review",
             null
         ));
         autoDelegate(docketId);
@@ -119,7 +119,7 @@ public class WorkflowAutomationService {
             : docket.getTitle();
 
         docketService.createDelegations(docketId, new CreateDelegationRequest(java.util.List.of(
-            new DelegationItemRequest(RoleCode.LEGATUS, "执行主任务：" + objective, java.util.List.of())
+            new DelegationItemRequest(RoleCode.LEGATUS, "Execute primary objective: " + objective, java.util.List.of())
         )));
     }
 
@@ -137,7 +137,7 @@ public class WorkflowAutomationService {
         );
 
         for (ExecutionTaskEntity task : tasks) {
-            executionTaskService.complete(task.getId(), new ExecutionTaskCompleteRequest("自动策略：默认完成执行任务"));
+            executionTaskService.complete(task.getId(), new ExecutionTaskCompleteRequest("Automation policy completed the execution task"));
         }
     }
 
@@ -149,9 +149,9 @@ public class WorkflowAutomationService {
         }
 
         auditArchiveService.pass(docketId, new AuditActionRequest(
-            java.util.List.of("自动策略：无额外风险"),
-            java.util.List.of("自动策略：通过审计"),
-            "自动策略：完成审计并归档",
+            java.util.List.of("Automation policy found no additional risk"),
+            java.util.List.of("Automation policy passed the audit"),
+            "Automation policy completed the audit and archived the docket",
             java.util.List.of("auto-archive")
         ));
     }

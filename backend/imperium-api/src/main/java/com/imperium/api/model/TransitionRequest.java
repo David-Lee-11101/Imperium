@@ -9,10 +9,10 @@ import jakarta.validation.constraints.NotNull;
  */
 public record TransitionRequest(
 
-    @NotNull(message = "目标状态不能为空")
+    @NotNull(message = "Target state is required")
     DocketState targetState,
 
-    @NotNull(message = "操作角色不能为空")
+    @NotNull(message = "Actor role is required")
     RoleCode actor,
 
     String comment

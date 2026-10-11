@@ -51,7 +51,7 @@ public class SenateService {
         DocketEntity docket = requireDocket(docketId);
         requireSenateMode(docket);
         if (docket.getState() != DocketState.IN_SENATE && docket.getState() != DocketState.DEBATING) {
-            throw new DocketException("INVALID_OPERATION", "当前状态不允许开启元老院会话");
+            throw new DocketException("INVALID_OPERATION", "Current docket state does not allow a Senate session");
         }
 
         SenateSessionEntity existing = findOpenSession(docketId);
@@ -79,7 +79,7 @@ public class SenateService {
         requireDocket(docketId);
         SenateSessionEntity session = findLatestSession(docketId);
         if (session == null) {
-            throw new DocketException("SENATE_SESSION_NOT_FOUND", "当前议案尚未建立元老院会话");
+            throw new DocketException("SENATE_SESSION_NOT_FOUND", "No Senate session exists for this docket");
         }
         return toResponse(session, listOpinions(session.getId()));
     }
@@ -100,11 +100,11 @@ public class SenateService {
             session = mapToEntity(openSession(docketId));
         }
         if (expectedSessionId != null && !expectedSessionId.isBlank() && !expectedSessionId.equals(session.getId())) {
-            throw new DocketException("STALE_SENATE_CALLBACK", "回调会话已过期或不匹配当前开启的元老院会话");
+            throw new DocketException("STALE_SENATE_CALLBACK", "Callback session is stale or does not match the active Senate session");
         }
 
         if (docket.getState() == DocketState.IN_SENATE) {
-            docketService.transition(docketId, new TransitionRequest(DocketState.DEBATING, req.roleCode(), "元老提交首条意见，进入正式辩论"));
+            docketService.transition(docketId, new TransitionRequest(DocketState.DEBATING, req.roleCode(), "First Senate opinion submitted; formal debate started"));
         }
 
         SenateOpinionEntity existing = senateOpinionMapper.selectOne(
@@ -195,13 +195,13 @@ public class SenateService {
 
     private void requireSenateMode(DocketEntity docket) {
         if (docket.getMode() == OperatingMode.DIRECT_DECREE) {
-            throw new DocketException("INVALID_OPERATION", "直接法令模式不启用元老院会话");
+            throw new DocketException("INVALID_OPERATION", "Direct-decree mode does not open Senate sessions");
         }
     }
 
     private void requireSenatorRole(RoleCode roleCode) {
         if (!SENATOR_ROLES.contains(roleCode)) {
-            throw new DocketException("INVALID_SENATOR_ROLE", "当前角色不是合法元老：" + roleCode);
+            throw new DocketException("INVALID_SENATOR_ROLE", "Role is not a valid senator: " + roleCode);
         }
     }
 
@@ -236,7 +236,7 @@ public class SenateService {
         String normalized = stance == null ? "NEUTRAL" : stance.trim().toUpperCase();
         return switch (normalized) {
             case "SUPPORT", "OBJECT", "NEUTRAL", "CONDITION" -> normalized;
-            default -> throw new DocketException("INVALID_STANCE", "不支持的元老立场：" + stance);
+            default -> throw new DocketException("INVALID_STANCE", "Unsupported Senate stance: " + stance);
         };
     }
 

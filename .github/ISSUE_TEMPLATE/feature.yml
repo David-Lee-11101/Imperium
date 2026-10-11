@@ -1,0 +1,28 @@
+name: Feature proposal
+description: Propose a focused workflow or platform capability.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Describe the concrete limitation or operator workflow.
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: State the observable behavior and affected role.
+    validations:
+      required: true
+  - type: textarea
+    id: boundaries
+    attributes:
+      label: Workflow and compatibility boundaries
+      description: Note affected states, events, persistence, API, security, or migration concerns.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
