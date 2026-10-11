@@ -50,14 +50,14 @@ function DocketListPage() {
             <h1>Imperium Dockets</h1>
           </div>
           <button className="secondary-button" onClick={() => void load()}>
-            刷新
+            Refresh
           </button>
         </div>
 
         <form className="stack-form" onSubmit={onSubmit}>
           <textarea
             className="text-area"
-            placeholder="输入恺撒法令"
+            placeholder="Enter Caesar's decree"
             value={form.edictRaw}
             onChange={(event) => setForm((prev) => ({ ...prev, edictRaw: event.target.value }))}
             rows={4}
@@ -66,7 +66,7 @@ function DocketListPage() {
 
           <div className="form-row">
             <label>
-              <span>运行模式</span>
+              <span>Operating mode</span>
               <select value={form.mode} onChange={(event) => setForm((prev) => ({ ...prev, mode: event.target.value }))}>
                 <option value="STANDARD_SENATE">STANDARD_SENATE</option>
                 <option value="DIRECT_DECREE">DIRECT_DECREE</option>
@@ -75,7 +75,7 @@ function DocketListPage() {
             </label>
 
             <label>
-              <span>优先级</span>
+              <span>Priority</span>
               <select value={form.priority} onChange={(event) => setForm((prev) => ({ ...prev, priority: event.target.value }))}>
                 <option value="LOW">LOW</option>
                 <option value="NORMAL">NORMAL</option>
@@ -86,7 +86,7 @@ function DocketListPage() {
           </div>
 
           <button className="primary-button" disabled={submitting} type="submit">
-            {submitting ? '创建中...' : '发布议案'}
+            {submitting ? 'Creating...' : 'Create docket'}
           </button>
         </form>
 
@@ -95,8 +95,8 @@ function DocketListPage() {
 
       <section className="page-section">
         <div className="section-heading">
-          <h2>议案列表</h2>
-          <span>{loading ? '加载中...' : `${dockets.length} 个议案`}</span>
+          <h2>Dockets</h2>
+          <span>{loading ? 'Loading...' : `${dockets.length} docket${dockets.length === 1 ? '' : 's'}`}</span>
         </div>
 
         <div className="grid-list">

@@ -74,7 +74,7 @@ public class AuditArchiveService {
                 .last("LIMIT 1")
         );
         if (archive == null) {
-            throw new DocketException("ARCHIVE_NOT_FOUND", "未找到议案归档记录：" + docketId);
+            throw new DocketException("ARCHIVE_NOT_FOUND", "Archive not found for docket: " + docketId);
         }
         return toArchiveRecord(archive);
     }
@@ -113,7 +113,7 @@ public class AuditArchiveService {
             "artifacts", archive.getArtifactsJson() == null ? List.of() : archive.getArtifactsJson()
         ));
 
-        docketService.transition(docketId, new TransitionRequest(DocketState.ARCHIVED, RoleCode.SCRIBA, "审计通过并归档"));
+        docketService.transition(docketId, new TransitionRequest(DocketState.ARCHIVED, RoleCode.SCRIBA, "Audit passed; docket archived"));
         return toArchiveRecord(archive);
     }
 
@@ -123,7 +123,7 @@ public class AuditArchiveService {
         AuditRecordEntity record = createAuditRecord(docketId, "RETURN", req);
         auditRecordMapper.insert(record);
         docketEventService.record(docketId, "AUDIT_RETURNED", "ROLE", RoleCode.PRAETOR.getValue(), buildAuditPayload(record, req));
-        docketService.transition(docketId, new TransitionRequest(DocketState.IN_EXECUTION, RoleCode.PRAETOR, "审计退回执行层"));
+        docketService.transition(docketId, new TransitionRequest(DocketState.IN_EXECUTION, RoleCode.PRAETOR, "Audit returned the docket to execution"));
         return toAuditRecord(record);
     }
 
@@ -133,7 +133,7 @@ public class AuditArchiveService {
         AuditRecordEntity record = createAuditRecord(docketId, "ESCALATE", req);
         auditRecordMapper.insert(record);
         docketEventService.record(docketId, "AUDIT_ESCALATED", "ROLE", RoleCode.PRAETOR.getValue(), buildAuditPayload(record, req));
-        docketService.transition(docketId, new TransitionRequest(DocketState.AWAITING_CAESAR, RoleCode.PRAETOR, "审计升级至恺撒裁决"));
+        docketService.transition(docketId, new TransitionRequest(DocketState.AWAITING_CAESAR, RoleCode.PRAETOR, "Audit escalated the docket for Caesar's decision"));
         return toAuditRecord(record);
     }
 
@@ -150,7 +150,7 @@ public class AuditArchiveService {
     private DocketEntity requireAuditState(String docketId) {
         DocketEntity docket = requireDocket(docketId);
         if (docket.getState() != DocketState.UNDER_AUDIT) {
-            throw new DocketException("INVALID_OPERATION", "当前议案未处于审计状态");
+            throw new DocketException("INVALID_OPERATION", "Docket is not under audit");
         }
         return docket;
     }

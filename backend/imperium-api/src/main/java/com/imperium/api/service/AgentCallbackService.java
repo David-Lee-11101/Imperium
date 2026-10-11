@@ -58,7 +58,7 @@ public class AgentCallbackService {
             senateService.submitOpinion(req.docketId(), req.senateSessionId(), new SenateOpinionRequest(
                 req.roleCode(),
                 req.stance() == null ? "NEUTRAL" : req.stance(),
-                req.summary() == null ? "自动回调意见" : req.summary(),
+                req.summary() == null ? "Automated callback opinion" : req.summary(),
                 req.details()
             ));
             return;
@@ -105,10 +105,10 @@ public class AgentCallbackService {
         }
         ExecutionTaskEntity task = executionTaskMapper.selectById(executionTaskId);
         if (task == null) {
-            throw new DocketException("EXECUTION_TASK_NOT_FOUND", "执行任务不存在：" + executionTaskId);
+            throw new DocketException("EXECUTION_TASK_NOT_FOUND", "Execution task not found: " + executionTaskId);
         }
         if (task.getRoleCode() != roleCode) {
-            throw new DocketException("EXECUTION_TASK_ROLE_MISMATCH", "执行任务角色与回调角色不一致");
+            throw new DocketException("EXECUTION_TASK_ROLE_MISMATCH", "Execution task role does not match the callback role");
         }
     }
 }

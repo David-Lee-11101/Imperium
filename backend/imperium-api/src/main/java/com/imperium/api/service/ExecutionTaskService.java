@@ -52,7 +52,7 @@ public class ExecutionTaskService {
     public ExecutionTaskResponse progress(String taskId, ExecutionTaskProgressRequest req) {
         ExecutionTaskEntity task = requireTask(taskId);
         if ("COMPLETED".equals(task.getStatus())) {
-            throw new DocketException("INVALID_OPERATION", "已完成任务不允许再更新进度");
+            throw new DocketException("INVALID_OPERATION", "Completed tasks cannot be updated");
         }
 
         task.setProgressPercent(req.progressPercent());
@@ -65,7 +65,7 @@ public class ExecutionTaskService {
         executionTaskMapper.updateById(task);
 
         updateDelegationStatus(task.getDelegationId(), "IN_PROGRESS", null);
-        ensureExecutionStarted(task.getDocketId(), task.getRoleCode(), "执行任务开始推进");
+        ensureExecutionStarted(task.getDocketId(), task.getRoleCode(), "Execution task started");
 
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("taskId", task.getId());
@@ -88,7 +88,7 @@ public class ExecutionTaskService {
         executionTaskMapper.updateById(task);
 
         updateDelegationStatus(task.getDelegationId(), "BLOCKED", null);
-        ensureExecutionStarted(task.getDocketId(), task.getRoleCode(), "执行任务进入阻塞");
+        ensureExecutionStarted(task.getDocketId(), task.getRoleCode(), "Execution task blocked");
 
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("taskId", task.getId());
@@ -112,7 +112,7 @@ public class ExecutionTaskService {
         executionTaskMapper.updateById(task);
 
         updateDelegationStatus(task.getDelegationId(), "COMPLETED", LocalDateTime.now());
-        ensureExecutionStarted(task.getDocketId(), task.getRoleCode(), "执行任务完成");
+        ensureExecutionStarted(task.getDocketId(), task.getRoleCode(), "Execution task completed");
 
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("taskId", task.getId());
@@ -150,7 +150,7 @@ public class ExecutionTaskService {
                 .eq(ExecutionTaskEntity::getStatus, "COMPLETED")
         );
         if (completed == total) {
-            docketService.transition(docketId, new TransitionRequest(DocketState.UNDER_AUDIT, RoleCode.CONSUL, "所有执行任务已完成，进入审计"));
+            docketService.transition(docketId, new TransitionRequest(DocketState.UNDER_AUDIT, RoleCode.CONSUL, "All execution tasks completed; audit started"));
         }
     }
 
@@ -177,7 +177,7 @@ public class ExecutionTaskService {
     private ExecutionTaskEntity requireTask(String taskId) {
         ExecutionTaskEntity task = executionTaskMapper.selectById(taskId);
         if (task == null) {
-            throw new DocketException("EXECUTION_TASK_NOT_FOUND", "执行任务不存在：" + taskId);
+            throw new DocketException("EXECUTION_TASK_NOT_FOUND", "Execution task not found: " + taskId);
         }
         return task;
     }

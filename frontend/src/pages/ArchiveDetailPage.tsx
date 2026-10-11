@@ -26,7 +26,7 @@ function ArchiveDetailPage() {
             <p className="eyebrow">Archive Detail</p>
             <h1>{archive?.title || docketId}</h1>
           </div>
-          <Link className="secondary-button" to="/archives">返回归档列表</Link>
+          <Link className="secondary-button" to="/archives">Back to archives</Link>
         </div>
         {error ? <p className="error-text">{error}</p> : null}
         {archive ? (
@@ -34,11 +34,11 @@ function ArchiveDetailPage() {
             <p className="meta-line">Archived At: {archive.archivedAt}</p>
             <p className="description">{archive.finalSummary || 'No final summary'}</p>
             <strong>Artifacts</strong>
-            {archive.artifacts.length > 0 ? archive.artifacts.map((item) => <span key={item}>{item}</span>) : <span>无</span>}
-            <Link className="secondary-button" to={`/dockets/${archive.docketId}`}>查看原议案</Link>
+            {archive.artifacts.length > 0 ? archive.artifacts.map((item) => <span key={item}>{item}</span>) : <span>None</span>}
+            <Link className="secondary-button" to={`/dockets/${archive.docketId}`}>View source docket</Link>
           </div>
         ) : (
-          !error && <p className="meta-line">加载中...</p>
+          !error && <p className="meta-line">Loading...</p>
         )}
       </section>
     </div>

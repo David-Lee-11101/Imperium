@@ -17,11 +17,11 @@ public class DocketException extends RuntimeException {
     }
 
     public static DocketException notFound(String id) {
-        return new DocketException("DOCKET_NOT_FOUND", "议案不存在：" + id);
+        return new DocketException("DOCKET_NOT_FOUND", "Docket not found: " + id);
     }
 
     public static DocketException invalidTransition(String from, String to) {
         return new DocketException("INVALID_TRANSITION",
-            "不合法的状态流转：" + from + " → " + to);
+            "Invalid state transition: " + from + " → " + to);
     }
 }

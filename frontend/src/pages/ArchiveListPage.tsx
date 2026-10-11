@@ -25,9 +25,9 @@ function ArchiveListPage() {
         <div className="card-header">
           <div>
             <p className="eyebrow">Archives</p>
-            <h1>归档案卷</h1>
+            <h1>Archived dockets</h1>
           </div>
-          <button className="secondary-button" onClick={() => void load()}>刷新</button>
+          <button className="secondary-button" onClick={() => void load()}>Refresh</button>
         </div>
         {error ? <p className="error-text">{error}</p> : null}
         <div className="grid-list">

@@ -9,10 +9,10 @@ import jakarta.validation.constraints.NotNull;
  */
 public record CreateDocketRequest(
 
-    @NotBlank(message = "法令内容不能为空")
+    @NotBlank(message = "Decree content is required")
     String edictRaw,
 
-    @NotNull(message = "运行模式不能为空")
+    @NotNull(message = "Operating mode is required")
     OperatingMode mode,
 
     String priority

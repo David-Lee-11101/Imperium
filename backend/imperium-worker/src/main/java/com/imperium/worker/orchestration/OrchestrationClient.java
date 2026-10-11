@@ -23,7 +23,7 @@ public class OrchestrationClient {
     @Value("${imperium.base-url:http://localhost:8080}")
     private String baseUrl;
 
-    @Value("${imperium.internal.secret:${imperium.agent.callback-secret:dev-secret-change-in-prod}}")
+    @Value("${imperium.internal.secret}")
     private String internalSecret;
 
     public void triage(String docketId) throws IOException, InterruptedException {

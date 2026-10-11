@@ -6,8 +6,8 @@ spring:
 
   datasource:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DB:imperium}?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-    username: ${MYSQL_USER:root}
-    password: ${MYSQL_PASSWORD:root}
+    username: ${MYSQL_USER:imperium}
+    password: ${MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 mybatis-plus:
@@ -26,7 +26,7 @@ imperium:
     path: ${OPENCLAW_PATH:openclaw}
     workspace-root: ${OPENCLAW_WORKSPACE_ROOT:/tmp/imperium/workspaces}
   agent:
-    callback-secret: ${AGENT_CALLBACK_SECRET:dev-secret-change-in-prod}
+    callback-secret: ${AGENT_CALLBACK_SECRET}
     default-timeout-sec: 120
   outbox:
     publisher:
@@ -34,3 +34,5 @@ imperium:
       interval-ms: ${IMPERIUM_OUTBOX_INTERVAL_MS:5000}
       batch-size: ${IMPERIUM_OUTBOX_BATCH_SIZE:50}
       max-retries: ${IMPERIUM_OUTBOX_MAX_RETRIES:10}
+  internal:
+    secret: ${IMPERIUM_INTERNAL_SECRET}

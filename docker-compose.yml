@@ -3,14 +3,16 @@ services:
     image: mysql:8.4
     container_name: imperium-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: imperium
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?set MYSQL_ROOT_PASSWORD in .env}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-imperium}
+      MYSQL_USER: ${MYSQL_USER:-imperium}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?set MYSQL_PASSWORD in .env}
     ports:
       - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -proot"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p$${MYSQL_ROOT_PASSWORD}"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -60,10 +62,10 @@ services:
       MYSQL_HOST: mysql
       MYSQL_PORT: 3306
       MYSQL_DB: ${MYSQL_DATABASE:-imperium}
-      MYSQL_USER: ${MYSQL_USER:-root}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-root}
-      AGENT_CALLBACK_SECRET: ${AGENT_CALLBACK_SECRET:-dev-secret-change-in-prod}
-      IMPERIUM_INTERNAL_SECRET: ${IMPERIUM_INTERNAL_SECRET:-dev-secret-change-in-prod}
+      MYSQL_USER: ${MYSQL_USER:-imperium}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?set MYSQL_PASSWORD in .env}
+      AGENT_CALLBACK_SECRET: ${AGENT_CALLBACK_SECRET:?set AGENT_CALLBACK_SECRET in .env}
+      IMPERIUM_INTERNAL_SECRET: ${IMPERIUM_INTERNAL_SECRET:?set IMPERIUM_INTERNAL_SECRET in .env}
     ports:
       - "8080:8080"
     healthcheck:
@@ -93,13 +95,13 @@ services:
       MYSQL_HOST: mysql
       MYSQL_PORT: 3306
       MYSQL_DB: ${MYSQL_DATABASE:-imperium}
-      MYSQL_USER: ${MYSQL_USER:-root}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-root}
+      MYSQL_USER: ${MYSQL_USER:-imperium}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?set MYSQL_PASSWORD in .env}
       ROCKETMQ_NAME_SERVER: rocketmq-namesrv:9876
       IMPERIUM_BASE_URL: http://imperium-api:8080
       OPENCLAW_PATH: /usr/local/bin/openclaw
-      AGENT_CALLBACK_SECRET: ${AGENT_CALLBACK_SECRET:-dev-secret-change-in-prod}
-      IMPERIUM_INTERNAL_SECRET: ${IMPERIUM_INTERNAL_SECRET:-dev-secret-change-in-prod}
+      AGENT_CALLBACK_SECRET: ${AGENT_CALLBACK_SECRET:?set AGENT_CALLBACK_SECRET in .env}
+      IMPERIUM_INTERNAL_SECRET: ${IMPERIUM_INTERNAL_SECRET:?set IMPERIUM_INTERNAL_SECRET in .env}
       OPENCLAW_STATE_DIR: /root/.openclaw
     volumes:
       - ${OPENCLAW_BIN_PATH:-/opt/homebrew/bin/openclaw}:/usr/local/bin/openclaw:ro

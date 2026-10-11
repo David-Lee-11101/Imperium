@@ -92,9 +92,9 @@ public class OutboxPublisherJob {
 
             log.info("Outbox 事件已发布：id={} destination={}", event.getId(), destination);
         } catch (JsonProcessingException ex) {
-            markFailed(event, "JSON 序列化失败", ex);
+            markFailed(event, "JSON serialization failed", ex);
         } catch (Throwable ex) {
-            markFailed(event, "RocketMQ 发布失败", ex);
+            markFailed(event, "RocketMQ publication failed", ex);
         }
     }
 

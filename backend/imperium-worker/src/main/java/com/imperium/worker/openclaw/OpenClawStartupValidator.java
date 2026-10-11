@@ -35,7 +35,7 @@ public class OpenClawStartupValidator implements ApplicationRunner {
     @Value("${imperium.base-url:http://localhost:8080}")
     private String baseUrl;
 
-    @Value("${imperium.agent.callback-secret:dev-secret-change-in-prod}")
+    @Value("${imperium.agent.callback-secret}")
     private String callbackSecret;
 
     @Override
@@ -56,20 +56,20 @@ public class OpenClawStartupValidator implements ApplicationRunner {
             Process process = new ProcessBuilder(openClawPath, "--version").start();
             int exitCode = process.waitFor();
             if (exitCode != 0) {
-                throw new IllegalStateException("OpenClaw CLI 校验失败，exitCode=" + exitCode);
+                throw new IllegalStateException("OpenClaw CLI validation failed, exitCode=" + exitCode);
             }
             log.info("OpenClaw binary verified at path: {}", openClawPath);
         } catch (Exception ex) {
-            throw new IllegalStateException("OpenClaw CLI 不可用，请检查 OPENCLAW_PATH: " + openClawPath, ex);
+            throw new IllegalStateException("OpenClaw CLI is unavailable; check OPENCLAW_PATH: " + openClawPath, ex);
         }
     }
 
     private void validateSecrets() {
         if (callbackSecret == null || callbackSecret.isBlank()) {
-            throw new IllegalStateException("AGENT_CALLBACK_SECRET 不能为空");
+            throw new IllegalStateException("AGENT_CALLBACK_SECRET must not be blank");
         }
         if (baseUrl == null || baseUrl.isBlank()) {
-            throw new IllegalStateException("IMPERIUM_BASE_URL 不能为空");
+            throw new IllegalStateException("IMPERIUM_BASE_URL must not be blank");
         }
     }
 

@@ -137,52 +137,52 @@ public class DocketService {
     public DocketDetailResponse tribuneApprove(String id, TribuneReviewRequest req) {
         recordTribuneReview(id, "APPROVED", req);
         enterVetoReviewIfNeeded(id);
-        return transitionByRole(id, DocketState.AWAITING_CAESAR, RoleCode.TRIBUNE, "保民官审查通过");
+        return transitionByRole(id, DocketState.AWAITING_CAESAR, RoleCode.TRIBUNE, "Tribune approved the docket");
     }
 
     @Transactional
     public DocketDetailResponse tribuneReject(String id, TribuneReviewRequest req) {
         recordTribuneReview(id, "REJECTED", req);
         enterVetoReviewIfNeeded(id);
-        return transitionByRole(id, DocketState.REJECTED, RoleCode.TRIBUNE, safeText(req == null ? null : req.reason(), "保民官否决议案"));
+        return transitionByRole(id, DocketState.REJECTED, RoleCode.TRIBUNE, safeText(req == null ? null : req.reason(), "Tribune vetoed the docket"));
     }
 
     @Transactional
     public DocketDetailResponse tribuneReturn(String id, TribuneReviewRequest req) {
         recordTribuneReview(id, "RETURNED", req);
         enterVetoReviewIfNeeded(id);
-        return transitionByRole(id, DocketState.IN_SENATE, RoleCode.TRIBUNE, safeText(req == null ? null : req.reason(), "保民官退回元老院重议"));
+        return transitionByRole(id, DocketState.IN_SENATE, RoleCode.TRIBUNE, safeText(req == null ? null : req.reason(), "Tribune returned the docket to the Senate"));
     }
 
     @Transactional
     public DocketDetailResponse caesarApprove(String id, CaesarDecisionRequest req) {
         recordCaesarDecision(id, "APPROVE", req, false);
-        return transitionByRole(id, DocketState.MANDATED, RoleCode.CAESAR, safeText(req == null ? null : req.comment(), "恺撒批准议案"));
+        return transitionByRole(id, DocketState.MANDATED, RoleCode.CAESAR, safeText(req == null ? null : req.comment(), "Caesar approved the docket"));
     }
 
     @Transactional
     public DocketDetailResponse caesarReject(String id, CaesarDecisionRequest req) {
         recordCaesarDecision(id, "RETURN_SENATE", req, false);
-        return transitionByRole(id, DocketState.IN_SENATE, RoleCode.CAESAR, safeText(req == null ? null : req.comment(), "恺撒退回元老院"));
+        return transitionByRole(id, DocketState.IN_SENATE, RoleCode.CAESAR, safeText(req == null ? null : req.comment(), "Caesar returned the docket to the Senate"));
     }
 
     @Transactional
     public DocketDetailResponse caesarOverride(String id, CaesarDecisionRequest req) {
         recordCaesarDecision(id, "OVERRIDE", req, true);
-        return transitionByRole(id, DocketState.MANDATED, RoleCode.CAESAR, safeText(req == null ? null : req.comment(), "恺撒强制批准议案"));
+        return transitionByRole(id, DocketState.MANDATED, RoleCode.CAESAR, safeText(req == null ? null : req.comment(), "Caesar overrode objections and approved the docket"));
     }
 
     @Transactional
     public DocketDetailResponse caesarRestrict(String id, CaesarDecisionRequest req) {
         recordCaesarDecision(id, "RESTRICT", req, false);
-        return transitionByRole(id, DocketState.MANDATED, RoleCode.CAESAR, safeText(req.comment(), "恺撒附加限制后批准"));
+        return transitionByRole(id, DocketState.MANDATED, RoleCode.CAESAR, safeText(req.comment(), "Caesar approved the docket with constraints"));
     }
 
     @Transactional
     public List<DelegationResponse> createDelegations(String docketId, CreateDelegationRequest req) {
         DocketEntity docket = findOrThrow(docketId);
         if (docket.getState() != DocketState.MANDATED && docket.getState() != DocketState.DELEGATED) {
-            throw new DocketException("INVALID_OPERATION", "当前议案状态不允许派发执行项");
+            throw new DocketException("INVALID_OPERATION", "Current docket state does not allow delegation");
         }
 
         List<DelegationResponse> created = req.items().stream()
@@ -190,7 +190,7 @@ public class DocketService {
             .toList();
 
         if (docket.getState() == DocketState.MANDATED) {
-            transitionByRole(docketId, DocketState.DELEGATED, RoleCode.CONSUL, "执政官已创建执行派发");
+            transitionByRole(docketId, DocketState.DELEGATED, RoleCode.CONSUL, "Consul created execution delegations");
         }
 
         Map<String, Object> payload = new LinkedHashMap<>();
@@ -227,7 +227,7 @@ public class DocketService {
     public DocketDetailResponse suspend(String id, String comment) {
         DocketEntity entity = findOrThrow(id);
         if (entity.getState().isTerminal() || entity.getState() == DocketState.SUSPENDED) {
-            throw new DocketException("INVALID_OPERATION", "当前状态不允许暂停");
+            throw new DocketException("INVALID_OPERATION", "Current docket state does not allow suspension");
         }
         entity.setSuspendedFromState(entity.getState());
         entity.setState(DocketState.SUSPENDED);
@@ -248,7 +248,7 @@ public class DocketService {
     public DocketDetailResponse resume(String id) {
         DocketEntity entity = findOrThrow(id);
         if (entity.getState() != DocketState.SUSPENDED) {
-            throw new DocketException("INVALID_OPERATION", "议案未处于暂停状态");
+            throw new DocketException("INVALID_OPERATION", "Docket is not suspended");
         }
         DocketState restoreState = entity.getSuspendedFromState();
         entity.setState(restoreState);
@@ -269,7 +269,7 @@ public class DocketService {
     public DocketDetailResponse revoke(String id, String comment) {
         DocketEntity entity = findOrThrow(id);
         if (entity.getState().isTerminal()) {
-            throw new DocketException("INVALID_OPERATION", "议案已处于终态，无法撤销");
+            throw new DocketException("INVALID_OPERATION", "Docket is already in a terminal state and cannot be revoked");
         }
         entity.setState(DocketState.REVOKED);
         entity.setCurrentOwner(RoleCode.CAESAR);
@@ -318,7 +318,7 @@ public class DocketService {
 
     private DelegationResponse createDelegationItem(String docketId, DelegationItemRequest item) {
         if (!DELEGATABLE_ROLES.contains(item.roleCode())) {
-            throw new DocketException("INVALID_DELEGATION_ROLE", "该角色当前不允许由执政官直接派发：" + item.roleCode());
+            throw new DocketException("INVALID_DELEGATION_ROLE", "Consul cannot delegate directly to this role: " + item.roleCode());
         }
 
         String delegationId = generateDelegationId();
@@ -361,7 +361,7 @@ public class DocketService {
     private void enterVetoReviewIfNeeded(String docketId) {
         DocketEntity docket = findOrThrow(docketId);
         if (docket.getState() == DocketState.DEBATING) {
-            transitionByRole(docketId, DocketState.VETO_REVIEW, RoleCode.TRIBUNE, "保民官开始审查议案");
+            transitionByRole(docketId, DocketState.VETO_REVIEW, RoleCode.TRIBUNE, "Tribune began docket review");
         }
     }
 
@@ -415,7 +415,7 @@ public class DocketService {
     }
 
     private String extractTitle(String edictRaw) {
-        if (edictRaw == null || edictRaw.isBlank()) return "未命名议案";
+        if (edictRaw == null || edictRaw.isBlank()) return "Untitled docket";
         String trimmed = edictRaw.strip();
         return trimmed.length() > 64 ? trimmed.substring(0, 64) + "…" : trimmed;
     }

@@ -28,7 +28,7 @@ public class AgentCallbackController {
 
     private final AgentCallbackService agentCallbackService;
 
-    @Value("${imperium.agent.callback-secret:dev-secret-change-in-prod}")
+    @Value("${imperium.agent.callback-secret}")
     private String callbackSecret;
 
     @PostMapping("/progress")

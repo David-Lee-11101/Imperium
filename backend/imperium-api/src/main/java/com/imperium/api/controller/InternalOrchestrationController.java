@@ -25,7 +25,7 @@ public class InternalOrchestrationController {
 
     private final WorkflowAutomationService workflowAutomationService;
 
-    @Value("${imperium.internal.secret:${imperium.agent.callback-secret:dev-secret-change-in-prod}}")
+    @Value("${imperium.internal.secret}")
     private String internalSecret;
 
     @PostMapping("/{id}/triage")
