@@ -1,6 +1,6 @@
 # Senate-Agent-Orchestration: proposed framework
 
-Status: proposal over the existing Imperium MVP. This document does not rename the repository, replace historical tests, or assert that a complete multiagent framework exists.
+Status: framework proposal for Senate-Agent-Orchestration, built on the incomplete workflow MVP historically named Imperium. The accepted project identity does not imply a completed multiagent framework; historical tests and internal module names remain intact.
 
 ## Research question
 
@@ -34,4 +34,4 @@ Docket scope → independent deliberation → explicit objections → recorded h
 
 ## Current boundaries
 
-There is no demonstrated general-purpose multiagent consensus engine, hermetic full-stack recovery test, production deployment, or benchmark result. Local dispatch cannot establish broker delivery guarantees. A future repository rename needs link and workflow review; Java package and module names should remain stable unless migration is justified by tests. Historical product and technical documents remain as provenance and may describe planned functionality rather than accepted runtime evidence.
+There is no demonstrated general-purpose multiagent consensus engine, hermetic full-stack recovery test, production deployment, or benchmark result. Local dispatch cannot establish broker delivery guarantees. Java package and module names retain Imperium as implementation provenance; any runtime-name migration requires compatibility evidence. Historical product and technical documents remain as provenance and may describe planned functionality rather than accepted runtime evidence.
