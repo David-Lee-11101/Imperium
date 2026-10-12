@@ -1,12 +1,14 @@
-![Imperium architecture card](assets/hero.svg)
+![Senate-Agent-Orchestration architecture card](assets/hero.svg)
 
-# Imperium
+# Senate-Agent-Orchestration
 
-[![CI](https://github.com/David-Lee-11101/Imperium/actions/workflows/ci.yml/badge.svg)](https://github.com/David-Lee-11101/Imperium/actions/workflows/ci.yml)
+[![CI](https://github.com/David-Lee-11101/Senate-Agent-Orchestration/actions/workflows/ci.yml/badge.svg)](https://github.com/David-Lee-11101/Senate-Agent-Orchestration/actions/workflows/ci.yml)
 
-Imperium is an experimental workflow system for governed AI-assisted work. It models deliberation, veto review, human approval, delegated execution, recovery, audit, and archival as explicit state transitions instead of an unstructured agent conversation.
+Senate-Agent-Orchestration is an experimental workflow system for governed AI-assisted work. It models deliberation, veto review, human approval, delegated execution, recovery, audit, and archival as explicit state transitions instead of an unstructured agent conversation.
 
-The repository is a working MVP and an architecture experiment. It is not presented as a production-ready orchestration platform.
+The repository contains an incomplete MVP and an architecture experiment. Unit-tested pieces are a foundation for further work; the full orchestration topology has not been validated.
+
+The project adopts the Senate-Agent-Orchestration identity. Internal Java packages and module names retain Imperium to preserve implementation provenance. See the [Roman Senate framework proposal](docs/SENATE_PROPOSAL.md) for planned roles, authority boundaries, and acceptance gates.
 
 ## What is implemented
 
@@ -92,8 +94,8 @@ Read [Security and configuration](docs/SECURITY.md) before connecting external s
 
 ## Project status
 
-Imperium is an experimental MVP under active development. Interfaces and workflow semantics may change as integration evidence grows.
+Senate-Agent-Orchestration is an experimental MVP under active development. Interfaces and workflow semantics may change as integration evidence grows.
 
 ## License
 
-No open-source license has been selected. Copyright remains with the repository owner; reuse is not granted until a license is added.
+No open-source license has been selected. Original content remains subject to its copyright holders. No general reuse permission is granted for that content. GitHub platform viewing and forking rights still apply; third-party content retains its own notices and licenses.
